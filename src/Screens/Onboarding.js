@@ -1,7 +1,7 @@
 import React from 'react'
 import { ImageBackground, View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Onboarding = () => {
+const Onboarding = ({navigation}) => {
   return (
     <View>
      <ImageBackground
@@ -17,13 +17,14 @@ const Onboarding = () => {
        </View>
 
        <View style={styles.BottomContainer}>
-        <TouchableOpacity style={styles.SignInbtn}>
+
+        <TouchableOpacity style={styles.SignInbtn} onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.SignIntxt}> Sign In </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.SignUpbtn}>
           <Text style={styles.SignUptxt}> Sign Up </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
           
        </View>
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   SignInbtn: {
     alignSelf: 'center',
     //borderWidth: 1,
-    width: 340,
+    width: 300,
     height: 50,
     borderRadius: 20,
     backgroundColor: '#CEB89E',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   SignUpbtn: {
     alignSelf: 'center',
     borderWidth: 1,
-    width: 340,
+    width: 300,
     height: 50,
     borderRadius: 20,
     padding: 10,
