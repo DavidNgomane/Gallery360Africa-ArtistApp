@@ -2,7 +2,7 @@ import React from 'react';
 import { ImageBackground, View, Image, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
 
  
   return (
@@ -39,13 +39,13 @@ const SignIn = () => {
         placeholderTextColor="#fff"
       />
       
-      <TouchableOpacity style={styles.SignInbtn} onPress={() => navigation.navigate('SignIn')}>
+      <TouchableOpacity style={styles.SignInbtn} onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.SignIntxt}> Sign In </Text>
       </TouchableOpacity>
 
       <View style={{flexDirection: 'row', paddingTop: 10, justifyContent: 'center'}}>
         <Text style={{color: '#fff', fontSize: 16, textAlign: 'center'}}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('RegisterPage')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={{color: '#000', fontSize: 16, textDecorationLine: "underline", textAlign: 'center'}}>SignUp</Text>
               </TouchableOpacity>
       </View>  
@@ -74,13 +74,11 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    //backgroundColor: 'red',
   },
   BottomContainer: {
     flex: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    //backgroundColor: 'green',
     bottom: 20,
     margin: 5
   },
@@ -107,11 +105,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#000',
     paddingLeft: 15,
-    // top: 160
   },
   SignInbtn: {
     alignSelf: 'center',
-    //borderWidth: 1,
     width: 300,
     height: 50,
     borderRadius: 20,
