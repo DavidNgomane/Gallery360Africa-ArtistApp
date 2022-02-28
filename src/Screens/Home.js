@@ -5,10 +5,6 @@ const Home = () => {
     return(
         <View style={styles.container}>
         <View style={styles.Topcontainer}>
-            <Text style={styles.HeadingText}>Gallery 360 Africa</Text>
-            <Image 
-                source={ProfilePic}
-            />
 
         </View>
 
