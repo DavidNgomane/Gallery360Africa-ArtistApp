@@ -14,6 +14,7 @@ import SignUp from './src/Screens/SignUp';
 import Home from './src/Screens/Home';
 import Sales from './src/Screens/Sales';
 import Products from './src/Screens/Products';
+import LandingPage from './src/Screens/LandingPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -24,7 +25,7 @@ const TabNavigator = () => {
       screenOptions={{
         showPageIndicator: false,
         tabBarPressColor: '#000',
-        swipeEnabled: false,
+        swipeEnabled: true,
         tabBarStyle: {
           height: 50,
           minHeight: 0,
@@ -33,7 +34,10 @@ const TabNavigator = () => {
           width: 'auto',
           backgroundColor: '#fff',
           headerShadowVisible: false,
-          margin: 5
+          margin: 5,
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold'
         },
         tabBarActiveTintColor: '#000',
         tabBarInactiveTintColor: '#ceb89e',
@@ -52,21 +56,25 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='Home'
+        initialRouteName='LandingPage'
       >
         <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
         <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
         <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
         <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
         <Stack.Screen 
-          name='Home' 
+          name='LandingPage' 
           component={TabNavigator}
           options={({navigation}) => ({
             // headerLeft: () => {return null;},
             // headerBackVisible: false,
+            headerTitleStyle: {
+              color: '#ceb89e',
+              fontWeight: 'bold'
+            },
             title: 'Gallery 360 Africa',
             headerRight: () => (
-              <View style={{flexDirection: 'row', width: 74, justifyContent: 'space-between', }}>
+              <View style={{flexDirection: 'row', width: 45, justifyContent: 'space-between', }}>
                 <TouchableOpacity>
                   <Image source={require('../Gallery360Africa-ArtistApp/src/assets/images/Ellipse.png')}/>
                 </TouchableOpacity>
@@ -74,6 +82,8 @@ const App = () => {
                 )       
               })}
             />
+
+        <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
       </Stack.Navigator>
