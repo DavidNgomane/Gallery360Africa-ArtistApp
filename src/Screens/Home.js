@@ -13,7 +13,7 @@ const Home = () => {
         },
         {
             id: 2,
-            image: "https://images.unsplash.com/photo-1561002515-3aa8c1fdba2b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjN8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            image: "https://images.unsplash.com/photo-1547333590-47fae5f58d21?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzN8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
 
         },
         {
@@ -24,31 +24,30 @@ const Home = () => {
     ]
 
     return(
-        <View>
+        <View  style={styles.container}>
 
-        <View style={styles.container}>
+        <View>
             <Text style={styles.MostLikedText}>Most Liked</Text>
         </View>
 
-            <View style={{justifyContent: 'center', alignItems: 'center', margin: 10,}}> 
+            <View style={{justifyContent: 'center',alignSelf: 'center', alignItems: 'center', width: '90%', borderRadius: 20}}> 
             <FlatList 
-                      horizontal
+                      vertical
+                      showsVerticalScrollIndicator={false}
                       data={ArtImages}
                       keyExtractor={item => item.id}
                       renderItem={({ item }) => {
                         return(
                           <View style={styles.listItem2} >
-                            <TouchableOpacity>
                               <Image 
                                 source={{uri:item.image}} 
                                 style={styles.img}
                               />
-                            </TouchableOpacity>
                           </View>
                         )
                       }}
                     />
-        <Text>heloo</Text>
+        
         </View>
         </View>
                 )
@@ -71,15 +70,17 @@ const styles = StyleSheet.create({
 
     },
     img: {
-        height: 150,
-        width: 120,
-        borderRadius: 15
+        height: 450,
+        width: 310,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignSelf: 'center', 
+        
       },
       listItem2: {
-        paddingLeft: 15,
-        paddingTop: 20,
-        flexDirection: "row",
-        marginBottom: 45
+        flexDirection: "column",
+       marginVertical: 10
+
       },
 })
 export default Home;

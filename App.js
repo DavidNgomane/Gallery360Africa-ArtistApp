@@ -25,7 +25,7 @@ const TabNavigator = () => {
       screenOptions={{
         showPageIndicator: false,
         tabBarPressColor: '#000',
-        swipeEnabled: true,
+        swipeEnabled: false,
         tabBarStyle: {
           height: 50,
           minHeight: 0,
