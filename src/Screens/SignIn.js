@@ -39,7 +39,7 @@ const SignIn = ({navigation}) => {
         placeholderTextColor="#fff"
       />
       
-      <TouchableOpacity style={styles.SignInbtn} onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity style={styles.SignInbtn} onPress={() => navigation.navigate('LandingPage')}>
         <Text style={styles.SignIntxt}> Sign In </Text>
       </TouchableOpacity>
 

@@ -1,9 +1,10 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
-
-const Products = () => {
+const Products = ({navigation}) => {
 
     const ArtImages = [
         {
@@ -23,14 +24,21 @@ const Products = () => {
         },
     ]
 
-    return(
-        <View  style={styles.container}>
+    return (
+        <ScrollView horizontal={true} style={styles.container}>
 
-        <View>
-            <Text style={styles.MostLikedText}>Most Liked</Text>
-        </View>
+            <View style={styles.ScrollViewContainer}>
 
-            <View style={{justifyContent: 'center',alignSelf: 'center', alignItems: 'center', width: '90%', borderRadius: 20}}> 
+            <View style={styles.ImagePickerStyle} >
+                <TouchableOpacity onPress={() => NavigationContainer.navigate('')}>
+                    <MaterialIcons
+                        name="add-photo-alternate"
+                        size={150}
+                        color={'gray'}
+                    />
+                </TouchableOpacity>
+            </View>
+
             <FlatList 
                       horizontal
                       showsHorizontalIndicator={false}
@@ -49,7 +57,7 @@ const Products = () => {
                     />
         
         </View>
-        </View>
+        </ScrollView>
                 )
     }
 
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
 
     },
     img: {
-        height: 450,
+        height: 550,
         width: 310,
         borderRadius: 15,
         justifyContent: 'center',
@@ -79,8 +87,27 @@ const styles = StyleSheet.create({
       },
       listItem2: {
         flexDirection: "row",
-       marginHorizontal: 10
-
+       marginHorizontal: 10,
+       left: 20
       },
+      ImagePickerStyle: {
+        height: 550,
+        width: 310,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignSelf: 'center', 
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 20,
+        left: 15
+      },
+      ScrollViewContainer: {
+        flexDirection: 'row', 
+        justifyContent: 'center',
+        alignSelf: 'center', 
+        alignItems: 'center', 
+        width: '100%', 
+        borderRadius: 20
+      }
 })
 export default Products;

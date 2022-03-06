@@ -15,6 +15,7 @@ import Home from './src/Screens/Home';
 import Sales from './src/Screens/Sales';
 import Products from './src/Screens/Products';
 import LandingPage from './src/Screens/LandingPage';
+import Profile from './src/Screens/Profile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -56,7 +57,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='LandingPage'
+        initialRouteName='Profile'
       >
         <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
         <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
@@ -67,7 +68,7 @@ const App = () => {
           component={TabNavigator}
           options={({navigation}) => ({
             // headerLeft: () => {return null;},
-            // headerBackVisible: false,
+            headerBackVisible: false,
             headerTitleStyle: {
               color: '#ceb89e',
               fontWeight: 'bold'
@@ -86,6 +87,8 @@ const App = () => {
         <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
+        <Stack.Screen options={{headerShown: false}} name='Profile' component={Profile} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
