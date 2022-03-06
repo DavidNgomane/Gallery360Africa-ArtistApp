@@ -52,12 +52,12 @@ const TabNavigator = () => {
   )
 }
 
-const App = () => {
+const App = ({navigation}) => {
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='Profile'
+        initialRouteName='Splash'
       >
         <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
         <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
@@ -76,7 +76,7 @@ const App = () => {
             title: 'Gallery 360 Africa',
             headerRight: () => (
               <View style={{flexDirection: 'row', width: 45, justifyContent: 'space-between', }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                   <Image source={require('../Gallery360Africa-ArtistApp/src/assets/images/Ellipse.png')}/>
                 </TouchableOpacity>
               </View>
@@ -87,7 +87,7 @@ const App = () => {
         <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
-        <Stack.Screen options={{headerShown: false}} name='Profile' component={Profile} />
+        <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
 
       </Stack.Navigator>
     </NavigationContainer>

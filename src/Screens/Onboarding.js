@@ -34,7 +34,7 @@ const Onboarding = ({navigation}) => {
 }
 
 const BgImage = require('../assets/BgImages//OnboardingBg.png');
-const Onboardinglogo = require('../assets/logo/OnboardingLogo.png')
+const Onboardinglogo = require('../assets/logo/SignInLogo.png')
 
 const styles = StyleSheet.create({
   OnboardingContainer:{

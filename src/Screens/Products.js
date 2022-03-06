@@ -1,7 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as ImagePicker from 'react-native-image-picker';
 
 
 const Products = ({navigation}) => {
@@ -24,13 +25,69 @@ const Products = ({navigation}) => {
         },
     ]
 
+    const [imageUri, setimageUri] = useState("");
+    const [submit, setSubmit] = useState(false);
+
+    const openImageLibrary = async () =>{
+      const options = {
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+  
+    await ImagePicker.launchImageLibrary(options, (response) => {
+  
+        const uri = response.assets.map(({uri}) => uri).toString();
+        // console.log('tis is the one you need response', uri)
+        //  setimageUri(uri);
+        const imageName = uri.substring(uri.lastIndexOf('/'));
+        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+  
+    try {
+      setSubmit(true);
+      storage().ref(imageName).putFile(uploadUri)
+      .then((snapshot) => {
+        //You can check the image is now uploaded in the storage bucket
+        console.log(`${imageName} has been successfully uploaded.`);
+  
+        storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
+          console.log(`${imageURL} has been retrieved.`);
+          
+          setimageUri(imageURL);
+        }).catch((e) => console.log('retrieving image error => ', e));
+         
+      })
+      .catch((e) => console.log('uploading image error => ', e));
+    setSubmit(false);
+    
+    }
+    catch(e) {
+      console.error(e);
+    }
+        alert("image uploaded");
+            
+          
+         if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+          alert(response.customButton);
+        } else {
+          const uri = response.assets.map(({uri}) => uri).toString();
+        }
+      });
+    };
+
     return (
         <ScrollView horizontal={true} style={styles.container}>
 
             <View style={styles.ScrollViewContainer}>
 
             <View style={styles.ImagePickerStyle} >
-                <TouchableOpacity onPress={() => NavigationContainer.navigate('')}>
+                <TouchableOpacity onPress={() => openImageLibrary()}>
                     <MaterialIcons
                         name="add-photo-alternate"
                         size={150}
