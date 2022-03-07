@@ -1,137 +1,195 @@
-import React from 'react';
-import { ImageBackground, View, Image, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
-
-
-const SignIn = ({navigation}) => {
-
- 
-  return (
-    <KeyboardAvoidingView behavior='position'>
-      <ImageBackground
-        source={BgImage}
-        resizeMode='stretch'
-        style={styles.SignUpContainer}
-      >
-    <View style={styles.TopContainer}>
-      <Image 
-        source={SignInLogo}
-        style={styles.SignUpLogo}
-      />
-    </View>
-
-    <View style={styles.BottomContainer}>
-      <Text style={styles.WelcomeText}>Sign Up</Text>
-      <Text style={styles.SubText}>create your new account</Text>
-
-      <TextInput
-        style={styles.textField}
-        value=""  
-        //onChangeText={(text) => setRecipientName(text)}
-        placeholder="Full Name"
-        placeholderTextColor="#fff"
-      />
-
-      <TextInput
-        style={styles.textField}
-        value=""  
-        //onChangeText={(text) => setRecipientName(text)}
-        placeholder="Email"
-        placeholderTextColor="#fff"
-      />
-
-      <TextInput
-        style={styles.textField}
-        value=""  
-        //onChangeText={(text) => setRecipientName(text)}
-        placeholder="Password"
-        placeholderTextColor="#fff"
-      />
-      
-      <TouchableOpacity style={styles.SignUpbtn} onPress={() => navigation.navigate('SignIn')}>
-        <Text style={styles.SignUptxt}> Sign Up </Text>
-      </TouchableOpacity>
-
-      <View style={{flexDirection: 'row', paddingTop: 10, justifyContent: 'center'}}>
-        <Text style={{color: '#fff', fontSize: 16, textAlign: 'center'}}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <Text style={{color: '#000', fontSize: 16, textDecorationLine: "underline", textAlign: 'center'}}>SignIn</Text>
-              </TouchableOpacity>
-      </View>  
-
-    </View>
-
-     </ImageBackground>
-     </KeyboardAvoidingView>
-  )
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  Image,
+  Alert,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import LinearGradient from 'react-native-linear-gradient';
+// import { db, auth } from '../database/firebase';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+export default function SignUpScreen({navigation}) {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const onSignup = (email, password) => {
+    if (fullName !== "" && email !== "" && password !== ""){
+      auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        firestore().collection('users').doc(user.uid).set({
+                        uid: user.uid,
+                        fullName: fullName,
+                        email: user.email,
+                    }).then(() => {
+                      alert("You are successfully registered");
+                      navigation.navigate("SignInScreen");
+                    }).catch((error) => alert(error));
+       // console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+           alert('That email address is already in use!');
+        }
+        if (error.code === 'auth/invalid-email') {
+           alert('That email address is invalid!');
+        }
+        console.error(error);
+      });
+    }
 }
-
-const BgImage = require('../assets/BgImages/SignUp.png');
-const SignInLogo = require('../assets/logo/SignUpLogo.png')
-
+  return (
+    <>
+   <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#573E22'}}>
+  <View style={styles.topBody}>
+    <View>
+      <Image source={require('../assets/logo/SignUpLogo.png')} style={styles.logo}/>
+      </View>
+    </View>
+    <View style={styles.footer}>
+     <View  style={{marginLeft: 33, marginTop: 10}}>
+          <Text style={{fontSize: 36, color: '#22180E'}}>Sign Up</Text>
+          <Text style={{color: '#FFFFFF'}}>Create your new account</Text>
+      </View>
+    <View style={{flex: 1}}>
+          <View style={styles.SectionStyle}>
+            <TextInput
+              style={styles.inputStyle}
+              onChangeText={fullName => setFullName(fullName)}
+              value={fullName}
+              underlineColorAndroid="#f000"
+              placeholder="Full Name"
+              placeholderTextColor="#FFFFFF"
+              autoCapitalize="sentences"
+            />
+          </View>
+          <View style={styles.SectionStyle}>
+            <TextInput
+              style={[styles.inputStyle,
+                //  {borderColor: values.email.length < 1 || Validator.validate(values.email) ? '#fff' : 'red'}
+              ]}
+              onChangeText={email => setEmail(email)}
+              value={email}
+              underlineColorAndroid="#f000"
+              placeholder="Email"
+              placeholderTextColor="#FFFFFF"
+              keyboardType="email-address"
+              textContentType='emailAddress'
+            />
+          </View>
+          <View style={styles.SectionStyle}>
+            <TextInput
+              style={styles.inputStyle}
+              onChangeText={password => setPassword(password)}
+              value={password}
+              underlineColorAndroid="#f000"
+              placeholder="Password"
+              placeholderTextColor="#FFFFFF"
+              returnKeyType="next"
+              secureTextEntry={true}
+              textContentType="password"
+            />
+          </View>
+          <TouchableOpacity
+            onPress={onSignup}
+            activeOpacity={0.5}>
+            <LinearGradient start={{x: 1, y: 0}} end={{x: 1, y: 0}} colors={['#CEB89E', '#9F805C']} style={styles.buttonStyle}>
+            <Text style={styles.buttonTextStyle}>Sign Up</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+           {/* <Text style={{marginHorizontal: 65}}>
+              Already have an account?
+              <TouchableOpacity style={{marginTop: 9}} onPress={() => navigation.navigate('SignInScreen')}>
+                <Text style={{color: '#22180E'}}>
+                {' '}
+                Sign In
+                </Text>
+              </TouchableOpacity>
+           </Text> */}
+           <Text style={{}}>
+              Already have an account?
+           </Text>
+           <Text>
+           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                <Text style={{color: '#22180E'}}>
+                  {' '}
+                  Sign In
+                </Text>
+              </TouchableOpacity>
+           </Text>
+        </View>
+    </View>
+    </View>
+    </KeyboardAvoidingView>
+     </>
+  );
+}
 const styles = StyleSheet.create({
-  SignUpContainer: {
-    height: '100%',
-    width: '100%',
-  },
-  SignUpLogo: {
-    height: 250,
-    width: 250,
-    bottom: -10
-  },
-  TopContainer: {
-    flex: 2,
-    justifyContent: 'center',
+  topBody: {
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     alignItems: 'center',
-  },
-  BottomContainer: {
-    flex: 4,
     justifyContent: 'center',
+    height: 280
+  },
+  footer: {
+    flex: 1
+  },
+  SectionStyle: {
+    flexDirection: 'row',
+    height: 40,
+    marginTop: 17,
+    marginLeft: 35,
+    marginRight: 35,
+    margin: 10,
+  },
+  buttonStyle: {
+    backgroundColor: '#0E1822',
+    borderWidth: 0,
+    color: '#FFFFFF',
+    borderColor: '#7DE24E',
+    height: 50,
     alignItems: 'center',
-    bottom: 10,
-    margin: 5
+    borderRadius: 14,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 25,
+    marginBottom: 20,
   },
-  WelcomeText: {
-    fontSize: 45,
-    color: '#000',
-    padding: 5,
-    top: 45,
-    right: 75,
-    marginBottom: 10
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    paddingVertical: 13,
+    fontSize: 16,
   },
-  SubText: {
-    padding: 10,
-    top: 20,
-    fontSize: 14,
-    right: 73,
-    color: '#fff',
-    marginBottom: 15
-  },
-  textField: {
-    marginTop: 20,
+  inputStyle: {
+    flex: 1,
+    color: 'white',
+    height: 50,
+    paddingLeft: 15,
+    paddingRight: 15,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#fff',
-    height: 47,
-    width: 300,
-    alignSelf: 'center',
-    color: '#000',
-    paddingLeft: 15,
+    borderColor: '#FFFFFF',
   },
-  SignUpbtn: {
-    alignSelf: 'center',
-    width: 300,
-    height: 50,
-    borderRadius: 20,
-    backgroundColor: '#CEB89E',
-    padding: 10,
-    margin: 20
+     logo: {
+      height: 220,
+      width: 260,
+      alignSelf: 'center',
+      alignItems: 'center',
+      marginTop: 30,
   },
-  SignUptxt: {
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 22,
-    
-  },
-})
-export default SignIn;
+});

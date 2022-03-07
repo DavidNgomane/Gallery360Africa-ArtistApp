@@ -27,6 +27,7 @@ const Products = ({navigation}) => {
 
     const [imageUri, setimageUri] = useState("");
     const [submit, setSubmit] = useState(false);
+    const [modalOpen, setModalOpen] = useState("");
 
     const openImageLibrary = async () =>{
       const options = {
