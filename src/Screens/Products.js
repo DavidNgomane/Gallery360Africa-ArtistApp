@@ -333,11 +333,11 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         height: 95,
         width: 250,
-        backgroundColor: "#ffffff",
         padding: 10,
         paddingTop: 3,
         marginTop: 10,
-        borderWidth: 1
+        borderWidth: 1,
+        borderColor: '#ceb89e'
       },
       input: {
         height: 40,
