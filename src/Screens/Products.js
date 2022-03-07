@@ -119,12 +119,12 @@ const Products = ({navigation}) => {
           <View style={{left: 135, bottom: 25}}>
               <AntDesign 
                 name="closecircleo" size={24} 
-                color="#5f9ea0" 
+                color="#ceb89e" 
                 onPress={() => setModalVisible(!modalVisible)}
               />
           </View>
 
-          <Text style={{textAlign: "center", color: "#5f9ea0", fontSize: 25, bottom: 55}}>Upload Your Art</Text>
+          <Text style={{textAlign: "center", color: "#ceb89e", fontSize: 25, bottom: 55}}>Upload Your Art</Text>
           
           <View style={{bottom: 45}}>
               <TouchableOpacity  onPress={openImageLibrary}>
@@ -136,7 +136,7 @@ const Products = ({navigation}) => {
               
               <MaterialIcons 
                 name="camera" 
-                size={24} color="black" 
+                size={24} color="#ceb89e" 
                 style={{marginLeft: 80, 
                 marginTop: -25}}
               />
@@ -146,7 +146,7 @@ const Products = ({navigation}) => {
           <View style={{bottom: 30}}>
             <View style={styles.TextField}>
             <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
               marginHorizontal: 10,fontWeight: "bold"}}>Art Type:</Text>
             </View>
 
@@ -160,7 +160,7 @@ const Products = ({navigation}) => {
 
           <View style={styles.TextField}>
             <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flex: 1, flexDirection: "row",color: "#5f9ea0", 
+              <Text style={{flex: 1, flexDirection: "row",color: "#ceb89e", 
               marginHorizontal: 10,fontWeight: "bold"}}>Art Name:</Text>
             </View>
 
@@ -174,7 +174,7 @@ const Products = ({navigation}) => {
 
           <View style={styles.TextField}>
             <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
               marginHorizontal: 10,fontWeight: "bold"}}>
                 Price:</Text>
             </View>
@@ -189,7 +189,7 @@ const Products = ({navigation}) => {
 
           <View style={styles.TextField}>
             <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
               marginHorizontal: 10,fontWeight: "bold"}}>
                 Description:</Text>
             </View>
@@ -242,22 +242,12 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    MostLikedText: {
-        color: '#000',
-        justifyContent: 'flex-end',
-        textAlign: 'left',
-        margin: 15,
-        fontSize: 22,
-        fontWeight: 'bold',
-
-    },
     img: {
         height: 550,
         width: 310,
         borderRadius: 15,
         justifyContent: 'center',
         alignSelf: 'center', 
-        
       },
       listItem2: {
         flexDirection: "row",
@@ -308,19 +298,20 @@ const styles = StyleSheet.create({
         elevation: 5
       },
       button: {
-        backgroundColor: "#5f9ea0", 
+        backgroundColor: "#ceb89e", 
         marginHorizontal: 120, 
         borderRadius: 20, 
         width: 100, 
         height: 40,
         justifyContent: "center",
-        marginVertical: -20
+        marginVertical: -20,
+        //borderWidth: 1
       },
       buttonOpen: {
         backgroundColor: "#F194FF",
       },
       buttonClose: {
-        backgroundColor: "#5f9ea0", 
+        backgroundColor: "#ceb89e", 
         marginHorizontal: 120, 
         borderRadius: 20, 
         width: 100, 
@@ -328,7 +319,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
       },
       textStyle: {
-        color: "white",
+        color: "#fff",
         fontWeight: "bold",
         textAlign: "center"
       },
