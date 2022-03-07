@@ -1,8 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, {useState, useEffect} from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView, Modal, image, TextInput } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as ImagePicker from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 
 
 const Products = ({navigation}) => {
@@ -27,7 +29,10 @@ const Products = ({navigation}) => {
 
     const [imageUri, setimageUri] = useState("");
     const [submit, setSubmit] = useState(false);
-    const [modalOpen, setModalOpen] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
+    const [artType, setArtType] = useState('');
+    const [artUrl, setArtUrl] = useState('');
+    const [description, setDescription] = useState('');
 
     const openImageLibrary = async () =>{
       const options = {
@@ -82,13 +87,15 @@ const Products = ({navigation}) => {
       });
     };
 
+
+   
     return (
         <ScrollView horizontal={true} style={styles.container}>
 
             <View style={styles.ScrollViewContainer}>
 
             <View style={styles.ImagePickerStyle} >
-                <TouchableOpacity onPress={() => openImageLibrary()}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <MaterialIcons
                         name="add-photo-alternate"
                         size={150}
@@ -96,6 +103,115 @@ const Products = ({navigation}) => {
                     />
                 </TouchableOpacity>
             </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+
+          <View style={{left: 135, bottom: 25}}>
+              <AntDesign 
+                name="closecircleo" size={24} 
+                color="#5f9ea0" 
+                onPress={() => setModalVisible(!modalVisible)}
+              />
+          </View>
+
+          <Text style={{textAlign: "center", color: "#5f9ea0", fontSize: 25, bottom: 55}}>Upload Your Art</Text>
+          
+          <View style={{bottom: 45}}>
+              <TouchableOpacity  onPress={openImageLibrary}>
+              <Image 
+                style={styles.image} 
+                source={{uri: image}} 
+                value={image}
+              />
+              
+              <MaterialIcons 
+                name="camera" 
+                size={24} color="black" 
+                style={{marginLeft: 80, 
+                marginTop: -25}}
+              />
+              </TouchableOpacity>
+          </View>
+
+          <View style={{bottom: 30}}>
+            <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Art Type:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={name => setName(name)}
+                //value={name}
+                placeholder="Enter your name of itme"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flex: 1, flexDirection: "row",color: "#5f9ea0", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Art Name:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={name => setName(name)}
+                //value={name}
+                placeholder="Enter your name of itme"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              marginHorizontal: 10,fontWeight: "bold"}}>
+                Price:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={price => setPrice(price)}
+                //value={price}
+                placeholder="Enter price of item"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#5f9ea0", 
+              marginHorizontal: 10,fontWeight: "bold"}}>
+                Description:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={price => setPrice(price)}
+                //value={price}
+                placeholder="Enter price of item"
+              />
+          </View>
+        </View>
+
+            <TouchableOpacity
+              style={styles.button}
+             
+            >
+              <Text style={styles.textStyle}>Add</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
             <FlatList 
                       horizontal
@@ -157,7 +273,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 20,
-        left: 15
+        left: 15,
+        borderColor: 'gray'
       },
       ScrollViewContainer: {
         flexDirection: 'row', 
@@ -166,6 +283,83 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         width: '100%', 
         borderRadius: 20
-      }
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        width: "90%",
+        height: 670,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        backgroundColor: "#5f9ea0", 
+        marginHorizontal: 120, 
+        borderRadius: 20, 
+        width: 100, 
+        height: 40,
+        justifyContent: "center",
+        marginVertical: -20
+      },
+      buttonOpen: {
+        backgroundColor: "#F194FF",
+      },
+      buttonClose: {
+        backgroundColor: "#5f9ea0", 
+        marginHorizontal: 120, 
+        borderRadius: 20, 
+        width: 100, 
+        height: 40,
+        justifyContent: "center"
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+      },
+      TextField: {
+        justifyContent: "center",
+        alignSelf: "center",
+        borderRadius: 20,
+        height: 95,
+        width: 250,
+        backgroundColor: "#ffffff",
+        padding: 10,
+        paddingTop: 3,
+        marginTop: 10,
+        borderWidth: 1
+      },
+      input: {
+        height: 40,
+        margin: 12,
+        padding: 10,
+        color: '#000'
+      },
+      image: {
+        width: 120,
+        height: 120,
+        borderRadius: 200,
+        borderWidth: 2,
+        backgroundColor: "gray"
+      },
 })
 export default Products;
