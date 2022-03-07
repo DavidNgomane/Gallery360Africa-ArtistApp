@@ -103,7 +103,7 @@ const ArtistProfile = ({route, navigation}) => {
                             color="black"
                             size="small"/>)}
                       
-                            </View>
+                        </View>
                        <TextInput
                           placeholder='Edit Username'
                           onChangeText={(fullName) => setUserName(fullName)}

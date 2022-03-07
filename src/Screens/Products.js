@@ -1,10 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, {useState, useEffect} from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView, Modal, image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ScrollView, Modal, image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
+import firestore from "@react-native-firebase/firestore";
+import auth from '@react-native-firebase/auth'
 
 
 const Products = ({navigation}) => {
@@ -27,10 +29,49 @@ const Products = ({navigation}) => {
         },
     ]
 
+    //const [artistInfo, setArtistInfo] = useState([])
+    
+    const updateArtistInfo = async () => {
+      const artistUid = auth()?.currentUser?.uid;
+      await firestore()
+        .collection('Market')
+        .add({
+          ArtistUid: artistUid,
+          imageUri: imageUri,
+          artType: artType,
+          description: description,
+          artName: artName,
+          artPrice: artPrice,
+        });
+      alert("you have successfully update your profile");
+    }
+
+    //
+    const [artist, setArtist] = useState([])
+    
+    const getArtUrl = () => {
+      const artistUid = auth()?.currentUser?.uid;
+
+      return firestore()
+        .collection('Market')
+        .where('ArtistUid', '==', artistUid)
+        .onSnapshot((snapShot) => {
+          const query = snapShot.docs.map(docSnap => docSnap.data())
+          setArtist(query)
+        })
+    }
+    useEffect(() => {
+      getArtUrl();
+      // updateArtistInfo();
+    }, [])
+
+    //
     const [imageUri, setimageUri] = useState("");
     const [submit, setSubmit] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [artType, setArtType] = useState('');
+    const [artName, setArtName] = useState('');
+    const [artPrice, setArtPrice] = useState('')
     const [artUrl, setArtUrl] = useState('');
     const [description, setDescription] = useState('');
 
@@ -87,8 +128,6 @@ const Products = ({navigation}) => {
       });
     };
 
-
-   
     return (
         <ScrollView horizontal={true} style={styles.container}>
 
@@ -127,19 +166,21 @@ const Products = ({navigation}) => {
           <Text style={{textAlign: "center", color: "#ceb89e", fontSize: 25, bottom: 55}}>Upload Your Art</Text>
           
           <View style={{bottom: 45}}>
-              <TouchableOpacity  onPress={openImageLibrary}>
-              <Image 
-                style={styles.image} 
-                source={{uri: image}} 
-                value={image}
-              />
-              
-              <MaterialIcons 
-                name="camera" 
-                size={24} color="#ceb89e" 
-                style={{marginLeft: 80, 
-                marginTop: -25}}
-              />
+              <TouchableOpacity>
+               <Image source={`${ProfilePic}`} style={styles.image} />
+                  {!submit ? (
+                 
+                  <MaterialIcons 
+                    onPress={() => openImageLibrary()}
+                    name="camera" 
+                    size={24} color="#ceb89e" 
+                    style={{marginLeft: 80, 
+                    marginTop: -25}}
+                  />
+                   ) : (
+                  <ActivityIndicator  style={{ alignSelf: "center", position:"absolute" }}
+                  color="black"
+                  size="small"/>)}
               </TouchableOpacity>
           </View>
 
@@ -152,9 +193,9 @@ const Products = ({navigation}) => {
 
               <TextInput 
                 style={styles.input}
-                onChangeText={name => setName(name)}
+                onChangeText={artType => setArtType(artType)}
                 //value={name}
-                placeholder="Enter your name of itme"
+                placeholder="Enter Art Type"
               />
           </View>
 
@@ -166,9 +207,9 @@ const Products = ({navigation}) => {
 
               <TextInput 
                 style={styles.input}
-                onChangeText={name => setName(name)}
+                onChangeText={artName => setArtName(artName)}
                 //value={name}
-                placeholder="Enter your name of itme"
+                placeholder="Enter Art Name"
               />
           </View>
 
@@ -181,9 +222,9 @@ const Products = ({navigation}) => {
 
               <TextInput 
                 style={styles.input}
-                onChangeText={price => setPrice(price)}
+                onChangeText={artPrice => setArtPrice(artPrice)}
                 //value={price}
-                placeholder="Enter price of item"
+                placeholder="Enter Art Price"
               />
           </View>
 
@@ -196,16 +237,16 @@ const Products = ({navigation}) => {
 
               <TextInput 
                 style={styles.input}
-                onChangeText={price => setPrice(price)}
+                onChangeText={description => setDescription(description)}
                 //value={price}
-                placeholder="Enter price of item"
+                placeholder="Enter Art Description"
               />
           </View>
         </View>
 
             <TouchableOpacity
               style={styles.button}
-             
+                  onPress={updateArtistInfo}
             >
               <Text style={styles.textStyle}>Add</Text>
             </TouchableOpacity>
@@ -216,13 +257,13 @@ const Products = ({navigation}) => {
             <FlatList 
                       horizontal
                       showsHorizontalIndicator={false}
-                      data={ArtImages}
+                      data={artist}
                       keyExtractor={item => item.id}
                       renderItem={({ item }) => {
                         return(
                           <View style={styles.listItem2} >
                               <Image 
-                                source={{uri:item.image}} 
+                                source={{uri: item.imageUri}} 
                                 style={styles.img}
                               />
                           </View>
