@@ -23,7 +23,7 @@ export default function SignIn ({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLogin = async (email, password) => {
+  const onLogin = async () => {
     if(email !== null && password !== null) {
        try {
        await auth().signInWithEmailAndPassword(email, password)
@@ -31,7 +31,7 @@ export default function SignIn ({navigation}) {
           console.log(user);
           alert('User logged-in successfully!')
           // If server response message same as Data Matched
-          if (user) navigation.replace("Home");
+          if (user) navigation.replace("LandingPage");
         })
        } catch (error) {
         if (error.code === "auth/invalid-email")
