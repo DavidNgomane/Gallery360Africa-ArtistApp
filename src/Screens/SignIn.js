@@ -31,7 +31,7 @@ export default function SignIn ({navigation}) {
           console.log(user);
           alert('User logged-in successfully!')
           // If server response message same as Data Matched
-          if (user) navigation.replace("ExhTest");
+          if (user) navigation.replace("Home");
         })
        } catch (error) {
         if (error.code === "auth/invalid-email")

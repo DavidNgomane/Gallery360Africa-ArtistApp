@@ -19,23 +19,27 @@ import LinearGradient from 'react-native-linear-gradient';
 // import { db, auth } from '../database/firebase';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+
+
 export default function SignUpScreen({navigation}) {
-  const [fullName, setFullName] = useState('');
+
+  const [artistName, setArtistName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const onSignup = (email, password) => {
-    if (fullName !== "" && email !== "" && password !== ""){
+
+  const onSignup = () => {
+    if (artistName !== "" && email !== "" && password !== ""){
       auth()
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        firestore().collection('users').doc(user.uid).set({
-                        uid: user.uid,
-                        fullName: fullName,
-                        email: user.email,
+        const artist = userCredential.user;
+        firestore().collection('artists').doc(artist.uid).set({
+                        artistUid: artist.uid,
+                        artistName: artistName,
+                        email: artist.email,
                     }).then(() => {
                       alert("You are successfully registered");
-                      navigation.navigate("SignInScreen");
+                      navigation.navigate("SignIn");
                     }).catch((error) => alert(error));
        // console.log('User account created & signed in!');
       })
@@ -67,8 +71,8 @@ export default function SignUpScreen({navigation}) {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
-              onChangeText={fullName => setFullName(fullName)}
-              value={fullName}
+              onChangeText={artistName => setArtistName(artistName)}
+              value={artistName}
               underlineColorAndroid="#f000"
               placeholder="Full Name"
               placeholderTextColor="#FFFFFF"
