@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
-
-
+import firestore from "@react-native-firebase/firestore";
+import auth from '@react-native-firebase/auth'
 
 const Home = () => {
 
@@ -23,35 +23,53 @@ const Home = () => {
         },
     ]
 
+    //
+    const [likes, setLikes] = useState([])
+
+    const getMostLiked = () => {
+        const artistUid = auth()?.currentUser?.uid;
+
+        return firestore()
+            .collection('likes')
+            .where('artistUID', '==', artistUid)
+            .onSnapshot((onSnapshot) => {
+                const query = onSnapshot.docs.map(docSnap => docSnap.data());
+                setLikes(query)
+            })
+    }
+    useEffect(() => {
+        getMostLiked()
+    }, [])
+
+    //
     return(
         <View  style={styles.container}>
-
-        <View>
-            <Text style={styles.MostLikedText}>Most Liked</Text>
-        </View>
+            <View>
+                <Text style={styles.MostLikedText}>Most Liked</Text>
+            </View>
 
             <View style={{justifyContent: 'center',alignSelf: 'center', alignItems: 'center', width: '90%', borderRadius: 20}}> 
-            <FlatList 
-                      vertical
-                      showsVerticalScrollIndicator={false}
-                      data={ArtImages}
-                      keyExtractor={item => item.id}
-                      renderItem={({ item }) => {
-                        return(
-                          <View style={styles.listItem2} >
-                              <Image 
-                                source={{uri:item.image}} 
-                                style={styles.img}
-                              />
-                          </View>
+                <FlatList 
+                    vertical
+                    showsVerticalScrollIndicator={false}
+                    data={likes}
+                    keyExtractor={item => `${item.artistUID}`}
+                    renderItem={({ item }) => {
+                        return (
+                            <View style={styles.listItem2} >
+                                <Image 
+                                    source={{uri:item.image}} 
+                                    style={styles.img}
+                                />
+                            </View>
                         )
-                      }}
-                    />
-        
+                    }}
+                />
+            
+            </View>
         </View>
-        </View>
-                )
-    }
+    )
+}
 
 const ProfilePic = require('../assets/images/Ellipse.png')
 
@@ -62,12 +80,11 @@ const styles = StyleSheet.create({
     },
     MostLikedText: {
         color: '#000',
-        justifyContent: 'flex-end',
-        textAlign: 'left',
-        margin: 15,
+        // justifyContent: 'flex-end',
+        // textAlign: 'left',
+        // margin: 15,
         fontSize: 22,
         fontWeight: 'bold',
-
     },
     img: {
         height: 450,

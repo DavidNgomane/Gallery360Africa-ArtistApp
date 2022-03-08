@@ -8,42 +8,41 @@ import storage from '@react-native-firebase/storage';
 import firestore from "@react-native-firebase/firestore";
 import auth from '@react-native-firebase/auth'
 
-
 const Products = ({navigation}) => {
-
-    const ArtImages = [
-        {
-            id: 1,
-            image: "https://images.unsplash.com/photo-1604367233962-bce0799fbe9a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTZ8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-        {
-            id: 2,
-            image: "https://images.unsplash.com/photo-1547333590-47fae5f58d21?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzN8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-        {
-            id: 3,
-            image: "https://images.unsplash.com/photo-1585644198527-05519fdeaf98?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTB8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-    ]
-
-    //const [artistInfo, setArtistInfo] = useState([])
-    
-    const updateArtistInfo = async () => {
+    //
+    const artistArtDetails = async () => {
       const artistUid = auth()?.currentUser?.uid;
       await firestore()
         .collection('Market')
         .add({
           ArtistUid: artistUid,
-          imageUri: imageUri,
+          artUrl: imageUri,
           artType: artType,
           description: description,
           artName: artName,
           artPrice: artPrice,
-        });
+        })
+        .then(() => {
+          update(imageUri, artName, artType);
+
+        })
       alert("you have successfully update your profile");
+    }
+
+    const update = async (imageUri, artName, artType) => {
+      const artistUid = auth()?.currentUser?.uid;
+
+      try {
+        await firestore()
+          .collection('artists')
+          .doc(artistUid).update({
+            artUrl: imageUri,
+            artName: artName,
+            artType: artType,
+          });
+      } catch (error) {
+        alert(error);
+      }
     }
 
     //
@@ -62,7 +61,6 @@ const Products = ({navigation}) => {
     }
     useEffect(() => {
       getArtUrl();
-      // updateArtistInfo();
     }, [])
 
     //
@@ -72,7 +70,6 @@ const Products = ({navigation}) => {
     const [artType, setArtType] = useState('');
     const [artName, setArtName] = useState('');
     const [artPrice, setArtPrice] = useState('')
-    const [artUrl, setArtUrl] = useState('');
     const [description, setDescription] = useState('');
 
     const openImageLibrary = async () =>{
@@ -84,37 +81,33 @@ const Products = ({navigation}) => {
       };
   
     await ImagePicker.launchImageLibrary(options, (response) => {
-  
-        const uri = response.assets.map(({uri}) => uri).toString();
-        // console.log('tis is the one you need response', uri)
-        //  setimageUri(uri);
-        const imageName = uri.substring(uri.lastIndexOf('/'));
-        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-  
-    try {
-      setSubmit(true);
-      storage().ref(imageName).putFile(uploadUri)
-      .then((snapshot) => {
-        //You can check the image is now uploaded in the storage bucket
-        console.log(`${imageName} has been successfully uploaded.`);
-  
-        storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
-          console.log(`${imageURL} has been retrieved.`);
-          
-          setimageUri(imageURL);
-        }).catch((e) => console.log('retrieving image error => ', e));
-         
-      })
-      .catch((e) => console.log('uploading image error => ', e));
-    setSubmit(false);
+      const uri = response.assets.map(({uri}) => uri).toString();
+      const imageName = uri.substring(uri.lastIndexOf('/'));
+      const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+      
+      try {
+        setSubmit(true);
+        storage().ref(imageName).putFile(uploadUri)
+        .then((snapshot) => {
+          //You can check the image is now uploaded in the storage bucket
+          console.log(`${imageName} has been successfully uploaded.`);
     
-    }
+          storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
+            console.log(`${imageURL} has been retrieved.`);
+            setimageUri(imageURL);
+          }).catch((e) => console.log('retrieving image error => ', e));
+        })
+        .catch((e) => 
+          console.log('uploading image error => ', e
+        ));
+
+        setSubmit(false);
+      }
     catch(e) {
       console.error(e);
     }
         alert("image uploaded");
             
-          
          if (response.didCancel) {
           console.log('User cancelled image picker');
         } else if (response.error) {
@@ -246,7 +239,7 @@ const Products = ({navigation}) => {
 
             <TouchableOpacity
               style={styles.button}
-                  onPress={updateArtistInfo}
+                  onPress={artistArtDetails}
             >
               <Text style={styles.textStyle}>Add</Text>
             </TouchableOpacity>
@@ -257,13 +250,13 @@ const Products = ({navigation}) => {
       <FlatList 
         horizontal
         showsHorizontalIndicator={false}
-        data={ArtImages}
+        data={artist}
         keyExtractor={item => item.id}
         renderItem={({ item }) => {
           return(
             <View style={styles.listItem2} >
               <Image 
-                source={{uri: item.image}} 
+                source={{uri: item.artUrl}} 
                 style={styles.img}
               />
             </View>
@@ -372,7 +365,7 @@ const styles = StyleSheet.create({
       TextField: {
         justifyContent: "center",
         alignSelf: "center",
-        borderRadius: 20,
+        borderRadius: 10,
         height: 95,
         width: 250,
         padding: 10,
@@ -385,7 +378,7 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 12,
         padding: 10,
-        color: '#000'
+        color: '#ceb89e'
       },
       image: {
         width: 120,
