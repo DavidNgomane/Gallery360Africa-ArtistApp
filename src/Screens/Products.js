@@ -254,27 +254,27 @@ const Products = ({navigation}) => {
         </View>
       </Modal>
 
-            <FlatList 
-                      horizontal
-                      showsHorizontalIndicator={false}
-                      data={artist}
-                      keyExtractor={item => item.id}
-                      renderItem={({ item }) => {
-                        return(
-                          <View style={styles.listItem2} >
-                              <Image 
-                                source={{uri: item.imageUri}} 
-                                style={styles.img}
-                              />
-                          </View>
-                        )
-                      }}
-                    />
+      <FlatList 
+        horizontal
+        showsHorizontalIndicator={false}
+        data={ArtImages}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => {
+          return(
+            <View style={styles.listItem2} >
+              <Image 
+                source={{uri: item.image}} 
+                style={styles.img}
+              />
+            </View>
+          )
+        }}
+      />
         
-        </View>
-        </ScrollView>
-                )
-    }
+      </View>
+    </ScrollView>
+    )
+  }
 
 const ProfilePic = require('../assets/images/Ellipse.png')
 
@@ -284,28 +284,29 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     img: {
-        height: 550,
+        height: 500,
         width: 310,
-        borderRadius: 15,
+        borderRadius: 50,
         justifyContent: 'center',
         alignSelf: 'center', 
       },
       listItem2: {
         flexDirection: "row",
-       marginHorizontal: 10,
-       left: 20
+        marginHorizontal: 10,
+        // left: 20
       },
       ImagePickerStyle: {
-        height: 550,
+        height: 500,
         width: 310,
         borderRadius: 15,
         justifyContent: 'center',
         alignSelf: 'center', 
         alignItems: 'center',
         borderWidth: 1,
-        borderRadius: 20,
-        left: 15,
-        borderColor: 'gray'
+        borderRadius: 50,
+        // left: 15,
+        marginLeft: 15,
+        borderColor: 'gray',
       },
       ScrollViewContainer: {
         flexDirection: 'row', 
