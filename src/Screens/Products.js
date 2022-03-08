@@ -20,7 +20,7 @@ const Products = ({navigation}) => {
           artType: artType,
           description: description,
           artName: artName,
-          artPrice: artPrice,
+          price: artPrice,
         })
         .then(() => {
           update(imageUri, artName, artType);

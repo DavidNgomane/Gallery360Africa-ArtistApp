@@ -2,26 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 import firestore from "@react-native-firebase/firestore";
 import auth from '@react-native-firebase/auth'
+// icons
+import MaterialICommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Fontisto from 'react-native-vector-icons/Fontisto'
 
 const Home = () => {
-
-    const ArtImages = [
-        {
-            id: 1,
-            image: "https://images.unsplash.com/photo-1604367233962-bce0799fbe9a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTZ8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-        {
-            id: 2,
-            image: "https://images.unsplash.com/photo-1547333590-47fae5f58d21?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzN8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-        {
-            id: 3,
-            image: "https://images.unsplash.com/photo-1585644198527-05519fdeaf98?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTB8fGFydHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-
-        },
-    ]
 
     //
     const [likes, setLikes] = useState([])
@@ -50,7 +35,7 @@ const Home = () => {
 
             <View style={{justifyContent: 'center',alignSelf: 'center', alignItems: 'center', width: '90%', borderRadius: 20}}> 
                 <FlatList 
-                    vertical
+                    horizontal
                     showsVerticalScrollIndicator={false}
                     data={likes}
                     keyExtractor={item => `${item.artistUID}`}
@@ -58,9 +43,33 @@ const Home = () => {
                         return (
                             <View style={styles.listItem2} >
                                 <Image 
-                                    source={{uri:item.image}} 
+                                    source={{uri: item.imageUid}} 
                                     style={styles.img}
                                 />
+                                <View style={{ backgroundColor: '#fff', position: 'absolute', height: 50, bottom: 3, right: 3, left: 3, borderRadius: 12}}>
+                                    <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginVertical: 15 }}>
+                                        <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', paddingRight: 30}}>
+                                            <Fontisto
+                                                name='heart'
+                                                size={16}
+                                                color='red'
+                                                // style={{ position: 'absolute', bottom: 16, right: 0, left: 20 }}
+                                            />
+                                            <Text style={{ color: 'red', fontSize: 18, paddingHorizontal: 10 }}>{item.like}</Text>
+                                        </View>
+                                        
+                                        {/*  */}
+                                        <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', paddingLeft: 30 }}>
+                                            <Fontisto
+                                            name='comments'
+                                            size={16}
+                                            color='green'
+                                            // style={{ position: 'absolute', bottom: 16, right: 0, left: 100 }}
+                                            />
+                                            <Text style={{ color: 'green', fontSize: 18, paddingHorizontal: 10}}>{item.comments}</Text>
+                                        </View>
+                                    </View>
+                                </View>
                             </View>
                         )
                     }}
@@ -82,7 +91,7 @@ const styles = StyleSheet.create({
         color: '#000',
         // justifyContent: 'flex-end',
         // textAlign: 'left',
-        // margin: 15,
+        padding: 10,
         fontSize: 22,
         fontWeight: 'bold',
     },
