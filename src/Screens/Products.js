@@ -66,11 +66,17 @@ const Products = ({navigation}) => {
     //
     const [imageUri, setimageUri] = useState("");
     const [submit, setSubmit] = useState(false);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [artType, setArtType] = useState('');
     const [artName, setArtName] = useState('');
     const [artPrice, setArtPrice] = useState('')
     const [description, setDescription] = useState('');
+
+    const [modalVisible1, setModalVisible1] = useState(false);
+    const [address, setAddress] = useState('');
+    const [date, setDate] = useState('');
+    const [title, setExhibition] = useState('')
 
     const openImageLibrary = async () =>{
       const options = {
@@ -124,12 +130,22 @@ const Products = ({navigation}) => {
     return (
         <ScrollView horizontal={true} style={styles.container}>
 
-            <View style={styles.ScrollViewContainer}>
+        <View style={styles.ScrollViewContainer}>
 
             <View style={styles.ImagePickerStyle} >
+              <Text style={styles.HeaderText}>Upload Art to Market</Text>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <MaterialIcons
                         name="add-photo-alternate"
+                        size={150}
+                        color={'gray'}
+                    />
+                </TouchableOpacity>
+
+                <Text style={styles.HeaderText}>Upload Exhibition Details</Text>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <MaterialIcons
+                        name="list-alt"
                         size={150}
                         color={'gray'}
                     />
@@ -263,6 +279,115 @@ const Products = ({navigation}) => {
           )
         }}
       />
+
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible1}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible1(!modalVisible1);
+          }}
+        >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+
+          <View style={{left: 135, bottom: 25}}>
+              <AntDesign 
+                name="closecircleo" size={24} 
+                color="#ceb89e" 
+                onPress={() => setModalVisible1(!modalVisible1)}
+              />
+          </View>
+
+          <Text style={{textAlign: "center", color: "#ceb89e", fontSize: 25, bottom: 55}}>Upload Exhibition Details</Text>
+          
+          <View style={{bottom: 45}}>
+              <TouchableOpacity>
+               <Image source={`${ProfilePic}`} style={styles.image} />
+                  {!submit ? (
+                 
+                  <MaterialIcons 
+                    onPress={() => openImageLibrary()}
+                    name="camera" 
+                    size={24} color="#ceb89e" 
+                    style={{marginLeft: 80, 
+                    marginTop: -25}}
+                  />
+                   ) : (
+                  <ActivityIndicator  style={{ alignSelf: "center", position:"absolute" }}
+                  color="black"
+                  size="small"/>)}
+              </TouchableOpacity>
+          </View>
+
+          <View style={{bottom: 30}}>
+            <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Exhibition Title:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={artType => setArtType(artType)}
+                //value={name}
+                placeholder="Enter Art Type"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flex: 1, flexDirection: "row",color: "#ceb89e", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Date:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={date => setDate(date)}
+                //value={name}
+                placeholder="Enter Art Name"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Address:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={address => setAddress(address)}
+                //value={price}
+                placeholder="Enter Art Price"
+              />
+          </View>
+
+          <View style={styles.TextField}>
+            <View style={{flexDirection: "row", marginHorizontal: 3}}>
+              <Text style={{flexDirection: "row",color: "#ceb89e", 
+              marginHorizontal: 10,fontWeight: "bold"}}>Description:</Text>
+            </View>
+
+              <TextInput 
+                style={styles.input}
+                onChangeText={description => setDescription(description)}
+                //value={price}
+                placeholder="Enter Art Description"
+              />
+          </View>
+        </View>
+
+            <TouchableOpacity
+              style={styles.button}
+                  onPress={artistArtDetails}
+            >
+              <Text style={styles.textStyle}>Add</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
         
       </View>
     </ScrollView>
@@ -387,5 +512,10 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         backgroundColor: "gray"
       },
+      HeaderText: {
+        fontSize: 25,
+        color: '#ceb89e',
+
+      }
 })
 export default Products;
