@@ -11,20 +11,20 @@ const Home = () => {
     //
     const [likes, setLikes] = useState([])
 
-    const getMostLiked = () => {
-        const artistUid = auth()?.currentUser?.uid;
+    // const getMostLiked = () => {
+    //     const artistUid = auth()?.currentUser?.uid;
 
-        return firestore()
-            .collection('likes')
-            .where('artistUID', '==', artistUid)
-            .onSnapshot((onSnapshot) => {
-                const query = onSnapshot.docs.map(docSnap => docSnap.data());
-                setLikes(query)
-            })
-    }
-    useEffect(() => {
-        getMostLiked()
-    }, [])
+    //     return firestore()
+    //         .collection('likes')
+    //         .where('artistUID', '==', artistUid)
+    //         .onSnapshot((onSnapshot) => {
+    //             const query = onSnapshot.docs.map(docSnap => docSnap.data());
+    //             setLikes(query)
+    //         })
+    // }
+    // useEffect(() => {
+    //     getMostLiked()
+    // }, [])
 
     //
     return(

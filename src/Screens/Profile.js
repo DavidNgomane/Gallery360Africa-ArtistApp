@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, ImageBackground, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, Image, ImageBackground, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, ActivityIndicator,  } from "react-native";
 //import firestore from "@react-native-firebase/firestore";
 import { globalStyles } from "../assets/styles/GlobalStyles";
 
@@ -17,7 +17,10 @@ const ArtistProfile = ({route, navigation}) => {
     const [modalOpen, setModalOpen] = useState("");
     const [submit, setSubmit] = useState(false);
     const [userName, setUserName] = useState("")
-  const [imageUri, setimageUri] = useState("");
+    const [imageUri, setimageUri] = useState("");
+    const [contacts, setContacts] = useState();
+    const [collabos, setCollabos] = useState()
+    const [bio, setBio] = useState()
 
     const openImageLibrary = async () =>{
         const options = {
@@ -89,30 +92,49 @@ const ArtistProfile = ({route, navigation}) => {
    <View style={{height: '100%', width: '100%'}}>
       <View style={styles.TopContainer}>
           
-      <Modal visible={modalOpen}>
-                     <View style={styles.modalContainer}>
-                       <View style={styles.closeBtnContaainer}>
-                         <EvilIcons onPress={()=> setModalOpen(false) } name='close' size={35} color="white" />
-                       </View>
-                       <View style={styles.editprofileImgContainer}>
-                            <Image source={`${artistPhoto}`} style={styles.uploadedImage} />
-                            {!submit ? (
-                            <AntDesign onPress={() => openImageLibrary()} style={styles.imgAddIcon} name="pluscircle" size={35} color="#E3E3E3" />
-                            ) : (
-                             <ActivityIndicator  style={{ alignSelf: "center", position:"absolute" }}
-                            color="black"
-                            size="small"/>)}
-                      
-                        </View>
-                       <TextInput
-                          placeholder='Edit Username'
-                          onChangeText={(fullName) => setUserName(fullName)}
-                          style={styles.editUserInput} />
-                       <TouchableOpacity  style={styles.updateBtn}>
-                         <Text style={styles.modalText}>Update</Text>
-                       </TouchableOpacity>
-                     </View>
-                </Modal>
+        <Modal visible={modalOpen}>
+          <View style={styles.modalContainer}>
+            <View style={styles.closeBtnContaainer}>
+              <EvilIcons onPress={()=> setModalOpen(false) } name='close' size={35} color="white" />
+            </View>
+
+            <View style={styles.editprofileImgContainer}>
+              <Image source={`${artistPhoto}`} style={styles.uploadedImage} />
+                {!submit ? (
+                  <AntDesign onPress={() => openImageLibrary()} style={styles.imgAddIcon} name="pluscircle" size={35} color="#E3E3E3" />
+                  ) : (
+                  <ActivityIndicator  style={{ alignSelf: "center", position:"absolute" }}
+                    color="black"
+                    size="small"
+                  />)
+                }        
+            </View>
+
+            <TextInput
+              placeholder='Edit Username'
+              onChangeText={(fullName) => setUserName(fullName)}
+              style={styles.editUserInput} 
+            />
+            <TextInput
+              placeholder='Bio'
+              onChangeText={(bio) => setBio(bio)}
+              style={styles.editUserInput} 
+            />
+            <TextInput
+              placeholder='Collaborators'
+              onChangeText={(collabos) => setCollabos(collabos)}
+              style={styles.editUserInput} 
+            />
+            <TextInput
+              placeholder='Contact Details'
+              onChangeText={(contacts) => setContacts(contacts)}
+              style={styles.editUserInput} 
+            />
+            <TouchableOpacity  style={styles.updateBtn}>
+              <Text style={styles.modalText}>Update</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
 
         <View style={styles.VideoContainer}>
           <Image 

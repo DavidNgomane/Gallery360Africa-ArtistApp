@@ -57,7 +57,7 @@ const App = ({navigation}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='LandingPage'
+        initialRouteName='Splash'
       >
         <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
         <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />

@@ -9,9 +9,96 @@ import firestore from "@react-native-firebase/firestore";
 import auth from '@react-native-firebase/auth'
 
 const Products = ({navigation}) => {
+
     //
+    const [imageUri, setimageUri] = useState("");
+    const [submit, setSubmit] = useState(false);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [artType, setArtType] = useState('');
+    const [artName, setArtName] = useState('');
+    const [artPrice, setArtPrice] = useState(0)
+    const [description, setDescription] = useState('');
+
+    const [modalVisible1, setModalVisible1] = useState(false);
+    const [address, setAddress] = useState('');
+    const [date, setDate] = useState('');
+    const [title, setExhibition] = useState('')
+
+    const openImageLibrary = async () => {
+      const options = {
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+  
+      await ImagePicker.launchImageLibrary(options, (response) => {
+        const uri = response.assets.map(({uri}) => uri).toString();
+        const imageName = uri.substring(uri.lastIndexOf('/'));
+        const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+        
+        try {
+          setSubmit(true);
+          storage().ref(imageName).putFile(uploadUri)
+          .then((snapshot) => {
+            //You can check the image is now uploaded in the storage bucket
+            console.log(`${imageName} has been successfully uploaded.`);
+      
+            storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
+              console.log(`${imageURL} has been retrieved.`);
+              setimageUri(imageURL);
+            }).catch((e) => console.log('retrieving image error => ', e));
+          })
+          .catch((e) => 
+            console.log('uploading image error => ', e
+          ));
+
+          setSubmit(false);
+        }
+      catch(e) {
+        console.error(e);
+      }
+          alert("image uploaded");
+              
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+          } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+            alert(response.customButton);
+          } else {
+            const uri = response.assets.map(({uri}) => uri).toString();
+          }
+        });
+    };
+
+    // add to exhibition collection
+    const exhitionDetails = async () => {
+      const artistUid = auth()?.currentUser?.uid;
+      setModalVisible1(!modalVisible1)
+      await firestore()
+        .collection('exhibition')
+        .add({
+          artistUid: artistUid,
+          exhibitionImage: imageUri,
+          address: address,
+          description: description,
+          exhibitionTitle: title,
+          date: date,
+        }).then((docSnap) => {
+            docSnap.update({
+              exhibitionUid: docSnap.id
+          })
+        })
+    }
+
+    // add to market collection and update artist collection
     const artistArtDetails = async () => {
       const artistUid = auth()?.currentUser?.uid;
+      setModalVisible(!modalVisible)
+
       await firestore()
         .collection('Market')
         .add({
@@ -22,11 +109,15 @@ const Products = ({navigation}) => {
           artName: artName,
           price: artPrice,
         })
+        .then((docSnap) => {
+          docSnap.update({
+            ImageUid: docSnap.id
+          })
+        })
         .then(() => {
           update(imageUri, artName, artType);
-
         })
-      alert("you have successfully update your profile");
+      alert("you have successfully update your Market");
     }
 
     const update = async (imageUri, artName, artType) => {
@@ -63,70 +154,7 @@ const Products = ({navigation}) => {
       getArtUrl();
     }, [])
 
-    //
-    const [imageUri, setimageUri] = useState("");
-    const [submit, setSubmit] = useState(false);
-
-    const [modalVisible, setModalVisible] = useState(false);
-    const [artType, setArtType] = useState('');
-    const [artName, setArtName] = useState('');
-    const [artPrice, setArtPrice] = useState('')
-    const [description, setDescription] = useState('');
-
-    const [modalVisible1, setModalVisible1] = useState(false);
-    const [address, setAddress] = useState('');
-    const [date, setDate] = useState('');
-    const [title, setExhibition] = useState('')
-
-    const openImageLibrary = async () =>{
-      const options = {
-        storageOptions: {
-          skipBackup: true,
-          path: 'images',
-        },
-      };
-  
-    await ImagePicker.launchImageLibrary(options, (response) => {
-      const uri = response.assets.map(({uri}) => uri).toString();
-      const imageName = uri.substring(uri.lastIndexOf('/'));
-      const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-      
-      try {
-        setSubmit(true);
-        storage().ref(imageName).putFile(uploadUri)
-        .then((snapshot) => {
-          //You can check the image is now uploaded in the storage bucket
-          console.log(`${imageName} has been successfully uploaded.`);
-    
-          storage().ref('/' + imageName).getDownloadURL().then((imageURL) => {
-            console.log(`${imageURL} has been retrieved.`);
-            setimageUri(imageURL);
-          }).catch((e) => console.log('retrieving image error => ', e));
-        })
-        .catch((e) => 
-          console.log('uploading image error => ', e
-        ));
-
-        setSubmit(false);
-      }
-    catch(e) {
-      console.error(e);
-    }
-        alert("image uploaded");
-            
-         if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
-          alert(response.customButton);
-        } else {
-          const uri = response.assets.map(({uri}) => uri).toString();
-        }
-      });
-    };
-
+  //
     return (
         <ScrollView horizontal={true} style={styles.container}>
 
@@ -143,7 +171,7 @@ const Products = ({navigation}) => {
                 </TouchableOpacity>
 
                 <Text style={styles.HeaderText}>Upload Exhibition Details</Text>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <TouchableOpacity onPress={() => setModalVisible1(true)}>
                     <MaterialIcons
                         name="list-alt"
                         size={150}
@@ -157,7 +185,6 @@ const Products = ({navigation}) => {
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
             setModalVisible(!modalVisible);
           }}
         >
@@ -176,7 +203,7 @@ const Products = ({navigation}) => {
           
           <View style={{bottom: 45}}>
               <TouchableOpacity>
-               <Image source={`${ProfilePic}`} style={styles.image} />
+               <Image source={{uri: imageUri}} style={styles.image} />
                   {!submit ? (
                  
                   <MaterialIcons 
@@ -280,12 +307,12 @@ const Products = ({navigation}) => {
         }}
       />
 
+      {/* Exhibition Modal */}
       <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible1}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
             setModalVisible1(!modalVisible1);
           }}
         >
@@ -304,7 +331,7 @@ const Products = ({navigation}) => {
           
           <View style={{bottom: 45}}>
               <TouchableOpacity>
-               <Image source={`${ProfilePic}`} style={styles.image} />
+               <Image source={{uri: imageUri}} style={styles.image} />
                   {!submit ? (
                  
                   <MaterialIcons 
@@ -325,14 +352,14 @@ const Products = ({navigation}) => {
             <View style={styles.TextField}>
             <View style={{flexDirection: "row", marginHorizontal: 3}}>
               <Text style={{flexDirection: "row",color: "#ceb89e", 
-              marginHorizontal: 10,fontWeight: "bold"}}>Exhibition Title:</Text>
+                      marginHorizontal: 10, fontWeight: "bold"}}>Exhibition Title:</Text>
             </View>
 
               <TextInput 
                 style={styles.input}
-                onChangeText={artType => setArtType(artType)}
+                onChangeText={title => setExhibition(title)}
                 //value={name}
-                placeholder="Enter Art Type"
+                placeholder="Enter Exhibition title"
               />
           </View>
 
@@ -346,7 +373,7 @@ const Products = ({navigation}) => {
                 style={styles.input}
                 onChangeText={date => setDate(date)}
                 //value={name}
-                placeholder="Enter Art Name"
+                placeholder="Enter Exhibition Date"
               />
           </View>
 
@@ -360,7 +387,7 @@ const Products = ({navigation}) => {
                 style={styles.input}
                 onChangeText={address => setAddress(address)}
                 //value={price}
-                placeholder="Enter Art Price"
+                placeholder="Enter Address"
               />
           </View>
 
@@ -381,7 +408,7 @@ const Products = ({navigation}) => {
 
             <TouchableOpacity
               style={styles.button}
-                  onPress={artistArtDetails}
+                  onPress={exhitionDetails}
             >
               <Text style={styles.textStyle}>Add</Text>
             </TouchableOpacity>
