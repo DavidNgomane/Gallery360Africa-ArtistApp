@@ -37,9 +37,11 @@ export default function SignUpScreen({navigation}) {
                         artistUid: artist.uid,
                         artistName: artistName,
                         email: artist.email,
+                        photoUrl: 
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCTa1o13qHi0hBEUMcOCKQhrrNSr8pSUmAoA&usqp=CAU"
                     }).then(() => {
                       alert("You are successfully registered");
-                      navigation.navigate("SignIn");
+                      navigation.navigate("SignIn", );
                     }).catch((error) => alert(error));
        // console.log('User account created & signed in!');
       })

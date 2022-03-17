@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,6 +6,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
+import auth from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
 
 import Splash from './src/Screens/Splash';
 import Onboarding from './src/Screens/Onboarding';
@@ -52,8 +55,39 @@ const TabNavigator = () => {
   )
 }
 
-const App = ({navigation}) => {
+const App = ({navigation, route}) => {
 
+  const [uid, setUID] = useState("");
+  const [User, setUser] = useState(null);
+  const [artistName, setArtistName] = useState(null);
+
+  useEffect(() => {
+    const unregister = auth().onAuthStateChanged(userExist=>{
+      const artistUid = auth()?.currentUser?.uid;
+
+          if(userExist) {
+             setuser(userExist);
+
+             firestore().collection("artists").where("uid", "==",userExist.uid).onSnapshot((snapShot) => {
+              const users = snapShot.docs.map((document) => document.data().photoUrl);
+              const uName = snapShot.docs.map((document) => document.data().artistName);
+              // console.log(cartItems + "  this the number of item added to cart")
+              setUser(users);
+              setFullName(uName);
+            });
+          
+        }
+          else {
+            setUser("");
+        }
+    });
+
+    return () => {
+      unregister()
+    }
+}, [])
+
+const artistUid = auth()?.currentUser?.uid;
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -76,7 +110,7 @@ const App = ({navigation}) => {
             title: 'Gallery 360 Africa',
             headerRight: () => (
               <View style={{flexDirection: 'row', width: 45, justifyContent: 'space-between', }}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Profile', {artistUid: artistUid, artistName: artistName,})}>
                   <Image source={require('../Gallery360Africa-ArtistApp/src/assets/images/Ellipse.png')}/>
                 </TouchableOpacity>
               </View>

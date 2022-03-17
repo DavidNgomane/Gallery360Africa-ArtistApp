@@ -107,7 +107,7 @@ const Products = ({navigation}) => {
           artType: artType,
           description: description,
           artName: artName,
-          price: artPrice,
+          price: parseFloat(artPrice),
         })
         .then((docSnap) => {
           docSnap.update({
