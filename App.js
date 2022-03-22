@@ -60,20 +60,21 @@ const App = ({navigation, route}) => {
   const [uid, setUID] = useState("");
   const [User, setUser] = useState(null);
   const [artistName, setArtistName] = useState(null);
+  
 
   useEffect(() => {
     const unregister = auth().onAuthStateChanged(userExist=>{
       const artistUid = auth()?.currentUser?.uid;
 
           if(userExist) {
-             setuser(userExist);
+             //setuser(userExist);
 
              firestore().collection("artists").where("uid", "==",userExist.uid).onSnapshot((snapShot) => {
               const users = snapShot.docs.map((document) => document.data().photoUrl);
               const uName = snapShot.docs.map((document) => document.data().artistName);
               // console.log(cartItems + "  this the number of item added to cart")
               setUser(users);
-              setFullName(uName);
+              setArtistName(uName);
             });
           
         }
