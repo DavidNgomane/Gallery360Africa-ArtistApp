@@ -5,7 +5,7 @@ import {
   View,
   Text,
   Image,
-  ImageBackground,
+  ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Keyboard,
@@ -17,38 +17,60 @@ import * as yup from 'yup';
 import LinearGradient from 'react-native-linear-gradient';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
 
 export default function SignIn ({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onLogin = async () => {
-    if(email !== null && password !== null) {
-       try {
-       await auth().signInWithEmailAndPassword(email, password)
-        .then((user) => {
+       setLoading(true)
+       if(email !== "" && password !== "") {
+        await auth().signInWithEmailAndPassword(email, password)
+          .then((user) => {
+            <ActivityIndicator size="large" color="#0000ff" />
           console.log(user);
-          alert('User logged-in successfully!')
-          // If server response message same as Data Matched
-          if (user) navigation.replace("LandingPage");
+          Toast.show({
+            type: 'success',
+            text1: 'You have successfully loged in ',
         })
-       } catch (error) {
-        if (error.code === "auth/invalid-email")
-        alert("Email is not valid");
-        else if (error.code === "auth/user-not-found")
-           alert("No User Found");
-        else {
-          alert(
-            "Please check your email id or password"
-          );
+          if (user) navigation.replace('LandingPage');
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.code === "auth/invalid-email")
+          {
+          Toast.show({
+            type: 'error',
+            text1: 'Email is not valid',
+        })
+        setLoading(false)
         }
-       }
+          else if (error.code === "auth/user-not-found")
+          {
+            Toast.show({
+              type: 'error',
+              text1: 'No User Found',
+          });
+          setLoading(false)
+        }
+        else {
+            Toast.show({
+              type: 'error',
+              text1: 'Please check your email id or password',
+           })
+           setLoading(false)
+        }
+      });
+    }
   }
-}
 
+  // 
   return (
     <>
+
     <View style={{flex: 1, backgroundColor: '#573E22'}}>
     <View style={styles.topBody}>
     <View>
@@ -90,27 +112,7 @@ export default function SignIn ({navigation}) {
             <Text style={styles.buttonTextStyle}>Sign In</Text>
             </LinearGradient>
           </TouchableOpacity>
-        {/* <View >
-           <Text style={{marginHorizontal: 65}}>
-              Don't have an account?
-              <TouchableOpacity style={{marginTop: 9}} onPress={() => navigation.navigate('SignUpScreen')}>
-                <Text style={{color: '#22180E'}}>
-                {' '}
-                Sign Un
-                </Text>
-              </TouchableOpacity>
-           </Text>
-        </View> */}
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-           {/* <Text style={{marginHorizontal: 65}}>
-              Already have an account?
-              <TouchableOpacity style={{marginTop: 9}} onPress={() => navigation.navigate('SignInScreen')}>
-                <Text style={{color: '#22180E'}}>
-                {' '}
-                Sign In
-                </Text>
-              </TouchableOpacity>
-           </Text> */}
            <Text style={{}}>
               Don't have an account?
            </Text>
@@ -125,6 +127,7 @@ export default function SignIn ({navigation}) {
         </View>
         </View>
     </View>
+
     </>
   );
 }

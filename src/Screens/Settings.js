@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, SafeAreaView, ImageBackground, TouchableOpacity } from 'react-native'
 import React from 'react'
-import TermsAndConditions from '../assets/components/TermsAndConditions'
+import auth from '@react-native-firebase/auth'
+import Toast from 'react-native-toast-message';
 
 export default function Settings({navigation}) {
 
@@ -9,10 +10,10 @@ export default function Settings({navigation}) {
             await auth().signOut().then(() => {
               Toast.show({
                 type: 'error',
-                text1: 'Hello',
-                text2: 'You have signed out!',
+                // text1: 'Hello',
+                text1: 'You have signed out!',
              })
-               navigation.replace("SignIn")
+               navigation.replace('SignIn')
             }).catch((error) => alert(error))
         }catch(e){
           console.log(e)

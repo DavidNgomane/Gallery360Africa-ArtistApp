@@ -9,7 +9,8 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import auth from "@react-native-firebase/auth";
 import firestore from '@react-native-firebase/firestore';
-
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+// 
 import Splash from './src/Screens/Splash';
 import Onboarding from './src/Screens/Onboarding';
 import SignIn from './src/Screens/SignIn';
@@ -26,27 +27,29 @@ const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
 
 const TabNavigator = () => {
+  
+
   return (
     <Tab.Navigator
       screenOptions={{
         showPageIndicator: false,
         tabBarPressColor: '#000',
         swipeEnabled: false,
+        
         tabBarStyle: {
           height: 50,
           minHeight: 0,
-          //borderRadius: 20,
           marginHorizontal: -1,
           width: 'auto',
-          backgroundColor: '#fff',
-          headerShadowVisible: false,
-          margin: 5,
+          backgroundColor: '#ceb89e',
+          marginTop: 5,
+          
         },
         headerTitleStyle: {
           fontWeight: 'bold'
         },
         tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#ceb89e',
+        tabBarInactiveTintColor: '#fff',
         tabBarPressColor: '#000',
       }}
     >
@@ -58,15 +61,51 @@ const TabNavigator = () => {
 }
 
 const App = ({navigation, route}) => {
+  // 
+  const toastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: 'green' }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 17,
+          fontWeight: '400',
+        }}
+        text2Style={{
+          fontSize: 13,
+          color: 'green'
+        }}
+      />
+    ),
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 17,
+        }}
+        text2Style={{
+          fontSize: 13,
+          color: 'red'
+        }}
+      />
+    ),
+    tomatoToast: ({ text1, props }) => (
+      <View style={{ height: 60, width: '100%', backgroundColor: 'tomato' }}>
+        <Text>{text1}</Text>
+        <Text>{props.uuid}</Text>
+      </View>
+    )
+  };
 
+  // 
   const [artist, setArtist] = useState('');
   const [User, setUser] = useState(null);
   const [artistName, setArtistName] = useState(null);
-  
 
   useEffect(() => {
     const unregister = auth().onAuthStateChanged(userExist=>{
-      const artistUid = auth()?.currentUser?.uid;
+      // const artistUid = auth()?.currentUser?.uid;
 
           if(userExist) {
              setArtist(userExist);
@@ -93,6 +132,7 @@ const App = ({navigation, route}) => {
 const artistUid = auth()?.currentUser?.uid;
   return (
     <>
+
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName='Splash'
@@ -104,12 +144,17 @@ const artistUid = auth()?.currentUser?.uid;
           name='LandingPage' 
           component={TabNavigator}
           options={({navigation}) => ({
-            // headerLeft: () => {return null;},
             headerBackVisible: false,
+            headerShadowVisible: false,
             headerTitleStyle: {
-              color: '#ceb89e',
-              fontWeight: 'bold'
+              color: '#fff',
+              fontWeight: 'bold',
+              
             },
+            headerStyle: {
+              backgroundColor: '#ceb89e'
+            },
+        
             title: 'Gallery 360 Africa',
             headerRight: () => (
               <View style={{flexDirection: 'row', width: 45, justifyContent: 'space-between', }}>
@@ -124,7 +169,7 @@ const artistUid = auth()?.currentUser?.uid;
               })}
             />
       
-        <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
+        <Stack.Screen options={{headerShown: false,  }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
         <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
@@ -135,13 +180,12 @@ const artistUid = auth()?.currentUser?.uid;
         <>
           <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
           <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
-          <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
           <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
         </>
       }
       </Stack.Navigator>
     </NavigationContainer>
-    
+    <Toast config={toastConfig} />
   </>
   );
   
