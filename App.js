@@ -43,7 +43,6 @@ const TabNavigator = () => {
           width: 'auto',
           backgroundColor: '#ceb89e',
           marginTop: 5,
-          
         },
         headerTitleStyle: {
           fontWeight: 'bold'
@@ -169,7 +168,7 @@ const artistUid = auth()?.currentUser?.uid;
               })}
             />
       
-        <Stack.Screen options={{headerShown: false,  }} name='Home' component={Home} />
+        <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
         <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
