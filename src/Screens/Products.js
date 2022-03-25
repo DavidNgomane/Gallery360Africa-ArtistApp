@@ -19,6 +19,7 @@ const Products = ({navigation}) => {
     const [artName, setArtName] = useState('');
     const [artPrice, setArtPrice] = useState(0)
     const [description, setDescription] = useState('');
+    const [artSize, setArtSize] = useState(0);
 
     const [modalVisible1, setModalVisible1] = useState(false);
     const [address, setAddress] = useState('');
@@ -107,6 +108,7 @@ const Products = ({navigation}) => {
           artType: artType,
           description: description,
           artName: artName,
+          artSize: artSize,
           price: parseFloat(artPrice),
         })
         .then((docSnap) => {
@@ -130,6 +132,7 @@ const Products = ({navigation}) => {
             artUrl: imageUri,
             artName: artName,
             artType: artType,
+            artSize: artSize
           });
       } catch (error) {
         alert(error);
@@ -220,65 +223,79 @@ const Products = ({navigation}) => {
               </TouchableOpacity>
           </View>
 
-          <View style={{bottom: 30}}>
+          <ScrollView style={{bottom: 30}}>
+              <View style={styles.TextField}>
+              <View style={{flexDirection: "row", marginHorizontal: 3}}>
+                <Text style={{flexDirection: "row",color: "#ceb89e", 
+                marginHorizontal: 10,fontWeight: "bold"}}>Art Type:</Text>
+              </View>
+
+                <TextInput 
+                  style={styles.input}
+                  onChangeText={artType => setArtType(artType)}
+                  //value={name}
+                  placeholder="Enter Art Type"
+                />
+            </View>
+
             <View style={styles.TextField}>
-            <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#ceb89e", 
-              marginHorizontal: 10,fontWeight: "bold"}}>Art Type:</Text>
+              <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
+                <Text style={{flex: 1, flexDirection: "row",color: "#ceb89e", 
+                marginHorizontal: 10,fontWeight: "bold"}}>Art Name:</Text>
+              </View>
+
+                <TextInput 
+                  style={styles.input}
+                  onChangeText={artName => setArtName(artName)}
+                  //value={name}
+                  placeholder="Enter Art Name"
+                />
             </View>
 
-              <TextInput 
-                style={styles.input}
-                onChangeText={artType => setArtType(artType)}
-                //value={name}
-                placeholder="Enter Art Type"
-              />
-          </View>
+            <View style={styles.TextField}>
+              <View style={{flexDirection: "row", marginHorizontal: 3}}>
+                <Text style={{flexDirection: "row",color: "#ceb89e", 
+                marginHorizontal: 10,fontWeight: "bold"}}>
+                  Price:</Text>
+              </View>
 
-          <View style={styles.TextField}>
-            <View style={{flex: 1, flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flex: 1, flexDirection: "row",color: "#ceb89e", 
-              marginHorizontal: 10,fontWeight: "bold"}}>Art Name:</Text>
+                <TextInput 
+                  style={styles.input}
+                  onChangeText={artPrice => setArtPrice(artPrice)}
+                  //value={price}
+                  placeholder="Enter Art Price"
+                />
             </View>
 
-              <TextInput 
-                style={styles.input}
-                onChangeText={artName => setArtName(artName)}
-                //value={name}
-                placeholder="Enter Art Name"
-              />
-          </View>
+            <View style={styles.TextField}>
+              <View style={{flexDirection: "row", marginHorizontal: 3}}>
+                <Text style={{flexDirection: "row",color: "#ceb89e", 
+                marginHorizontal: 10,fontWeight: "bold"}}>
+                  Description:</Text>
+              </View>
 
-          <View style={styles.TextField}>
-            <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#ceb89e", 
-              marginHorizontal: 10,fontWeight: "bold"}}>
-                Price:</Text>
+                <TextInput 
+                  style={styles.input}
+                  onChangeText={description => setDescription(description)}
+                  //value={price}
+                  placeholder="Enter Art Description"
+                />
             </View>
+            <View style={styles.TextField}>
+              <View style={{flexDirection: "row", marginHorizontal: 3}}>
+                <Text style={{flexDirection: "row",color: "#ceb89e", 
+                marginHorizontal: 10,fontWeight: "bold"}}>
+                  Art Size: </Text>
+              </View>
 
-              <TextInput 
-                style={styles.input}
-                onChangeText={artPrice => setArtPrice(artPrice)}
-                //value={price}
-                placeholder="Enter Art Price"
-              />
-          </View>
-
-          <View style={styles.TextField}>
-            <View style={{flexDirection: "row", marginHorizontal: 3}}>
-              <Text style={{flexDirection: "row",color: "#ceb89e", 
-              marginHorizontal: 10,fontWeight: "bold"}}>
-                Description:</Text>
+                <TextInput 
+                  style={styles.input}
+                  onChangeText={artSize => setArtSize(artSize)}
+                  //value={price}
+                  placeholder="Enter Art Size"
+                />
             </View>
-
-              <TextInput 
-                style={styles.input}
-                onChangeText={description => setDescription(description)}
-                //value={price}
-                placeholder="Enter Art Description"
-              />
-          </View>
-        </View>
+          </ScrollView>
 
             <TouchableOpacity
               style={styles.button}
