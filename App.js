@@ -173,7 +173,7 @@ const artistUid = auth()?.currentUser?.uid;
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
         <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
         <Stack.Screen options={{headerShown: true}} name='Settings' component={Settings} />
-        <Stack.Screen options={{headerShown: true, titl: 'Terms & Conditions' }} name='TermsAndConditions' component={TermsAndConditions} />
+        <Stack.Screen options={{headerShown: true, title: 'Terms & Conditions' }} name='TermsAndConditions' component={TermsAndConditions} />
        </>
         :
         <>
