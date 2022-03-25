@@ -19,6 +19,8 @@ import Sales from './src/Screens/Sales';
 import Products from './src/Screens/Products';
 import LandingPage from './src/Screens/LandingPage';
 import Profile from './src/Screens/Profile';
+import Settings from './src/Screens/Settings';
+import TermsAndConditions from './src/assets/components/TermsAndConditions';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -69,7 +71,7 @@ const App = ({navigation, route}) => {
           if(userExist) {
              //setuser(userExist);
 
-             firestore().collection("artists").where("uid", "==",userExist.uid).onSnapshot((snapShot) => {
+             firestore().collection("artists").where("artistUid", "==", userExist.uid).onSnapshot((snapShot) => {
               const users = snapShot.docs.map((document) => document.data().photoUrl);
               const uName = snapShot.docs.map((document) => document.data().artistName);
               // console.log(cartItems + "  this the number of item added to cart")
@@ -111,8 +113,11 @@ const artistUid = auth()?.currentUser?.uid;
             title: 'Gallery 360 Africa',
             headerRight: () => (
               <View style={{flexDirection: 'row', width: 45, justifyContent: 'space-between', }}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile', {artistUid: artistUid, artistName: artistName,})}>
-                  <Image source={require('../Gallery360Africa-ArtistApp/src/assets/images/Ellipse.png')}/>
+                <TouchableOpacity onPress={() => navigation.navigate('Profile', {artistUid: artistUid, artistName: artistName, photoUrl: User})}>
+                  <Image 
+                    source={{uri: `${User}`}} 
+                    style={{width: 30, height:30, borderRadius:30, backgroundColor:"lightgrey" }}
+                  />
                 </TouchableOpacity>
               </View>
                 )       
@@ -123,7 +128,8 @@ const artistUid = auth()?.currentUser?.uid;
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
         <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
-
+        <Stack.Screen options={{headerShown: true}} name='Settings' component={Settings} />
+        <Stack.Screen options={{headerShown: true, titl: 'Terms & Conditions' }} name='TermsAndConditions' component={TermsAndConditions} />
       </Stack.Navigator>
     </NavigationContainer>
   );
