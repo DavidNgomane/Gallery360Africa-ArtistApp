@@ -59,7 +59,7 @@ const TabNavigator = () => {
 
 const App = ({navigation, route}) => {
 
-  const [uid, setUID] = useState("");
+  const [artist, setArtist] = useState('');
   const [User, setUser] = useState(null);
   const [artistName, setArtistName] = useState(null);
   
@@ -69,7 +69,7 @@ const App = ({navigation, route}) => {
       const artistUid = auth()?.currentUser?.uid;
 
           if(userExist) {
-             //setuser(userExist);
+             setArtist(userExist);
 
              firestore().collection("artists").where("artistUid", "==", userExist.uid).onSnapshot((snapShot) => {
               const users = snapShot.docs.map((document) => document.data().photoUrl);
@@ -92,14 +92,14 @@ const App = ({navigation, route}) => {
 
 const artistUid = auth()?.currentUser?.uid;
   return (
+    <>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName='Splash'
       >
-        <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
-        <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
-        <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
-        <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
+      {artist? 
+        <>
+       
         <Stack.Screen 
           name='LandingPage' 
           component={TabNavigator}
@@ -123,16 +123,28 @@ const artistUid = auth()?.currentUser?.uid;
                 )       
               })}
             />
-
+      
         <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
         <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
         <Stack.Screen options={{headerShown: true}} name='Settings' component={Settings} />
         <Stack.Screen options={{headerShown: true, titl: 'Terms & Conditions' }} name='TermsAndConditions' component={TermsAndConditions} />
+       </>
+        :
+        <>
+          <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
+          <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
+          <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
+          <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
+        </>
+      }
       </Stack.Navigator>
     </NavigationContainer>
+    
+  </>
   );
+  
 }
 
 export default App;
