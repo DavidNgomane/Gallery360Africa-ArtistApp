@@ -180,6 +180,7 @@ const artistUid = auth()?.currentUser?.uid;
           <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
           <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
           <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
+          <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
         </>
       }
       </Stack.Navigator>
