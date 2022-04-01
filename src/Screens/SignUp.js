@@ -58,7 +58,7 @@ export default function SignUpScreen({navigation}) {
 }
   return (
     <>
-   <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#573E22'}}>
+   <KeyboardAvoidingView behavior='' style={{flex: 1, backgroundColor: '#573E22'}}>
   <View style={styles.topBody}>
     <View>
       <Image source={require('../assets/logo/SignUpLogo.png')} style={styles.logo}/>
@@ -69,7 +69,7 @@ export default function SignUpScreen({navigation}) {
           <Text style={{fontSize: 36, color: '#22180E'}}>Sign Up</Text>
           <Text style={{color: '#FFFFFF'}}>Create your new account</Text>
       </View>
-    <View style={{flex: 1}}>
+    <View>
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}

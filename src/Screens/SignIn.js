@@ -69,9 +69,9 @@ export default function SignIn ({navigation}) {
 
   // 
   return (
-    <>
+   
 
-    <View style={{flex: 1, backgroundColor: '#573E22'}}>
+    <KeyboardAvoidingView behavior='position' style={{ backgroundColor: '#573E22', height: '100%', width: '100%'}}>
     <View style={styles.topBody}>
     <View>
       <Image source={require('../assets/logo/SignInLogo.png')} style={styles.logo}/>
@@ -82,7 +82,8 @@ export default function SignIn ({navigation}) {
                   <Text style={{fontSize: 36, color: '#22180E'}}>Welcome Back !</Text>
                   <Text style={{color: '#FFFFFF'}}>LogIn to your account</Text>
               </View>
-          <View style={styles.SectionStyle}>
+            <View style={{alignItems:'center'}}>
+
             <TextInput
               style={styles.inputStyle}
               onChangeText={email => setEmail(email)}
@@ -92,8 +93,8 @@ export default function SignIn ({navigation}) {
               placeholderTextColor="#FFFFFF"
               keyboardType="email-address"
             />
-          </View>
-          <View style={styles.SectionStyle}>
+          
+          
             <TextInput
               style={styles.inputStyle}
               onChangeText={password => setPassword(password)}
@@ -104,7 +105,9 @@ export default function SignIn ({navigation}) {
               returnKeyType="next"
               secureTextEntry={true}
             />
-          </View>
+
+            </View>
+          
           <TouchableOpacity
             onPress={onLogin}
             activeOpacity={0.5}>
@@ -112,23 +115,22 @@ export default function SignIn ({navigation}) {
             <Text style={styles.buttonTextStyle}>Sign In</Text>
             </LinearGradient>
           </TouchableOpacity>
+
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
            <Text style={{}}>
               Don't have an account?
            </Text>
-           <Text>
            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                 <Text style={{color: '#22180E'}}>
                   {' '}
                   Sign Up
                 </Text>
               </TouchableOpacity>
-           </Text>
         </View>
         </View>
-    </View>
+    </KeyboardAvoidingView>
 
-    </>
+    
   );
 }
 const styles = StyleSheet.create({
@@ -141,16 +143,16 @@ const styles = StyleSheet.create({
     height: 300
   },
   footer: {
-    flex: 1,
-    marginVertical: 25
+    //flex: 1,
+   // marginVertical: 25
   },
   SectionStyle: {
     flexDirection: 'row',
-    height: 40,
-    marginTop: 17,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
+    // height: 40,
+    // marginTop: 17,
+    // marginLeft: 35,
+    // marginRight: 35,
+    // margin: 10,
   },
   buttonStyle: {
     backgroundColor: '#BFA688',
@@ -171,14 +173,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   inputStyle: {
-    flex: 1,
     color: 'white',
-    height: 50,
-    paddingLeft: 15,
-    paddingRight: 15,
+    height: 70,
+    width:'90%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#FFFFFF',
+    marginVertical:10,
+    paddingHorizontal:20
   },
       logo: {
       height: 250,
