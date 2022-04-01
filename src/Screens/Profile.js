@@ -17,7 +17,8 @@ const background = require("../assets/images/home.png")
 export default function UserProfile({route, navigation}) {
 
   const [modalOpen, setModalOpen] = useState("");
-  const [userName, setUserName] = useState("")
+  const [userName, setUserName] = useState("");
+  const [description, setDescription] = useState("")
   const [imageUri, setimageUri] = useState("");
   const [submit, setSubmit] = useState(false);
   // const [photoUrl, setPhotoUrl] = useState("");
@@ -34,8 +35,6 @@ export default function UserProfile({route, navigation}) {
 
   await ImagePicker.launchImageLibrary(options, (response) => {
 
-     
-        
        if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -93,10 +92,25 @@ useEffect(() =>{
   console.log(photoUrl, "   the photootdsfsdfdsfs")
 }, []);
 
+const signoutUser = async () => {
+  try{
+      await auth().signOut().then(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Hello',
+          text2: 'You have signed out!',
+       })
+         navigation.replace("SignIn")
+      }).catch((error) => alert(error))
+  }catch(e){
+    console.log(e)
+  }
+}
+
 
   return (
     <View>
-      <View style={{top: 50}}>
+      <View style={{top: 135}}>
         <Modal visible={modalOpen}>
           <View style={styles.modalContainer}>
 
@@ -118,7 +132,15 @@ useEffect(() =>{
 
             <TextInput
               placeholder='Edit Username'
+              placeholderTextColor="gray" 
               onChangeText={(artistName) => setUserName(artistName)}
+              style={styles.editUserInput} 
+            />
+
+            <TextInput
+              placeholder='description'
+              placeholderTextColor="gray" 
+              onChangeText={(description) => setDescription(description)}
               style={styles.editUserInput} 
             />
 
@@ -139,42 +161,29 @@ useEffect(() =>{
 
             {/*  */}
             <View style={styles.optionsContainer}>
-              <TouchableOpacity 
-                onPress={() => navigation.navigate("Cart", {uuid: uuid, cartItem: cartItem})}
-                style={{backgroundColor:"#E3E3E3", width:"80%", height:70, flexDirection:"row", alignSelf:"center", alignItems:"center", borderRadius:20}}
-              >
-                <MaterialCommunityIcons
-                  name="cart"
-                  size={24}
-                  color={'#0E1822'}
-                  style={{ marginHorizontal: 10, overflow:"hidden",  color:"#0E1822"}}
-                />
-                <Text style={{marginHorizontal:10,  color:"#0E1822"}}>My Cart</Text>
-                <Entypo name="chevron-small-right" size={24} style={{marginVertical:-10, marginHorizontal:"47%",  color:"#0E1822"}}/>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={{backgroundColor:"#E3E3E3", width:"80%", height:70, flexDirection:"row", alignSelf:"center", alignItems:"center", borderRadius:20, marginVertical:15}}>
-                <MaterialIcons
-                  name="notifications"
-                  size={24}
-                  color={'#0E1822'}
-                  style={{ marginHorizontal: 10, overflow:"hidden",  color:"#0E1822"}}
-                />
-
-                <Text style={{marginHorizontal:10, color:"#0E1822"}}>Notifications</Text>
-                <Entypo name="chevron-small-right" size={24} style={{marginVertical:-10, marginHorizontal:"37%", color:"#0E1822"}}/>
-              </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={{backgroundColor:"#E3E3E3", width:"80%", height:70, flexDirection:"row", alignSelf:"center", alignItems:"center", borderRadius:20}}>
-                <Ionicons
-                  name="settings-outline"
+                <MaterialIcons
+                  name="notes"
                   size={24}
                   color={'#0E1822'}
                   style={{ marginHorizontal: 10, overflow:"hidden",  color:"#0E1822"}}
                 />
-                <Text style={{marginHorizontal:10, color:"#0E1822"}}>Settings</Text>
+                <Text style={{marginHorizontal:10, color:"#0E1822"}}>Terms & Conditions</Text>
                 <Entypo name="chevron-small-right" size={24} style={{marginVertical:-10, marginHorizontal:"47%",  color:"#0E1822"}}/>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={signoutUser} style={{backgroundColor:"#E3E3E3", width:"80%", height:70, flexDirection:"row", alignSelf:"center", alignItems:"center", borderRadius:20, marginVertical:15}}>
+                <AntDesign
+                  name="logout"
+                  size={24}
+                  color={'#0E1822'}
+                  style={{ marginHorizontal: 10, overflow:"hidden",  color:"#0E1822"}}
+                />
+                <Text style={{marginHorizontal:70, color:"#0E1822", textAlign: 'center'}}>Logout</Text>
+              </TouchableOpacity>
+
+             
           </View>
       </View>
     </View>
@@ -241,7 +250,7 @@ optionsContainer:{
 
 modalContainer:{
   width: '85%',
-  height: 475,
+  height: 520,
   backgroundColor:'#E3E3E3',
   borderRadius:15,
   alignSelf:'center',
@@ -265,8 +274,9 @@ editUserInput:{
   height: 50,
   paddingHorizontal: 65,
   borderRadius: 15,
-  marginVertical: 45,
+  marginVertical: 20,
   backgroundColor:'white',
+  color: '#000'
 },
 
 updateBtn:{

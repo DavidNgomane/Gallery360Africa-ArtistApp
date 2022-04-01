@@ -31,28 +31,31 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={{
-        showPageIndicator: false,
-        tabBarPressColor: '#000',
-        swipeEnabled: false,
-        
-        tabBarStyle: {
-          height: 50,
-          minHeight: 0,
-          marginHorizontal: -1,
-          width: 'auto',
-          backgroundColor: '#ceb89e',
-          marginTop: 5,
-        },
-        headerTitleStyle: {
-          fontWeight: 'bold'
-        },
-        tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#fff',
-        tabBarPressColor: '#000',
-      }}
+    tabBarOptions={{
+      elevation: 0,
+		marginBottom: 5,
+      tabStyle: {
+        height: 45,
+        minHeight: 0,
+        backgroundColor: '#ceb89e',
+        borderRadius: 20,
+        margin: 10,
+        marginVertical: 10,
+        padding: 3,
+        width: 160,
+        marginLeft:  10,
+      },
+      renderIndicator: () => null,
+    }}
+    screenOptions={{
+      tabBarPressColor: '#fff',
+      headerTransparent: true,
+      tabBarActiveTintColor: '#fff',
+      tabBarInactiveTintColor: '#000',
+      swipeEnabled: false,
+    }}
     >
-      <Tab.Screen name='Home' component={Home} />
+      {/* <Tab.Screen name='Home' component={Home} /> */}
       <Tab.Screen name='Sales' component={Sales} />
       <Tab.Screen name='Products' component={Products} />
     </Tab.Navigator>
@@ -135,7 +138,16 @@ const artistUid = auth()?.currentUser?.uid;
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName='Splash'
-      >
+
+        screenOptions={{
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            color: '#000',
+          },
+        }}
+        
+        >
+      
       {artist? 
         <>
        
@@ -145,13 +157,14 @@ const artistUid = auth()?.currentUser?.uid;
           options={({navigation}) => ({
             headerBackVisible: false,
             headerShadowVisible: false,
+            headerTitleAlign: 'left',
             headerTitleStyle: {
-              color: '#fff',
+              color: '#000',
               fontWeight: 'bold',
               
             },
             headerStyle: {
-              backgroundColor: '#ceb89e'
+              backgroundColor: '#fff'
             },
         
             title: 'Gallery 360 Africa',
@@ -171,7 +184,7 @@ const artistUid = auth()?.currentUser?.uid;
         <Stack.Screen options={{headerShown: false, }} name='Home' component={Home} />
         <Stack.Screen options={{headerShown: false}} name='Sales' component={Sales} />
         <Stack.Screen options={{headerShown: false}} name='Products' component={Products} />
-        <Stack.Screen options={{headerShown: true, headerBackVisible: true,}} name='Profile' component={Profile} />
+        <Stack.Screen options={{headerShown: true,  headerTransparent: true}} name='Profile' component={Profile} />
         <Stack.Screen options={{headerShown: true}} name='Settings' component={Settings} />
         <Stack.Screen options={{headerShown: true, title: 'Terms & Conditions' }} name='TermsAndConditions' component={TermsAndConditions} />
        </>
@@ -180,9 +193,10 @@ const artistUid = auth()?.currentUser?.uid;
           <Stack.Screen options={{headerShown: false}} name='Splash' component={Splash} />
           <Stack.Screen options={{headerShown: false}} name='Onboarding' component={Onboarding} />
           <Stack.Screen options={{headerShown: false}} name='SignUp' component={SignUp} />
-          <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
+          
         </>
       }
+      <Stack.Screen options={{headerShown: false}} name='SignIn' component={SignIn} />
       </Stack.Navigator>
     </NavigationContainer>
     <Toast config={toastConfig} />
